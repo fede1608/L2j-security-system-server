@@ -2,9 +2,8 @@
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import Client.SecClient;
+
 
 	public class L2jSecServer {
 	    public
@@ -30,38 +29,42 @@ import java.io.InputStreamReader;
 	}
 	
 	class ServerThread implements Runnable {
-		SSLSocket client = null;
+		SSLSocket socket = null;
+		SecClient cliente;
         public ServerThread(SSLSocket c) {
-            this.client = c;
+            this.socket = c;
+            this.cliente= new SecClient(c);
+            
         }
         public void run() {
             try {
-                System.out.println("Connected to client : "+client.getInetAddress().toString());
-                InputStream inputstream = client.getInputStream();
-	            InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
-	            BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+                System.out.println("Connected to client : "+socket.getInetAddress().toString());
+                
 
 	            String string = null;
-	            while ((string = bufferedreader.readLine()) != null) {
-	                System.out.println(string);
-	                System.out.flush();
+	            while (true){
+		            while ((string = this.cliente.readString()) != null) {
+		            	System.out.println("Mensaje "+string+ " from: "+ this.cliente.getIP());
+		                switch(Integer.parseInt(string)){
+		                	case 0: //Read HwID
+		                		this.cliente.ReadHwID();
+		                		break;
+		                	case 1: //Check System Hashes
+		                		this.cliente.ReadFileHashes();
+			                	break;
+		                	case 2:
+			                	break;
+		                	case 3:
+			                	break;
+		                };
+		            }
 	            }
-	            readHWID();
-	            readFilesHash();
-	            
-                client.close();
+                //socket.close();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
         }
-		private void readFilesHash() {
-			// TODO Auto-generated method stub
-			
-		}
-		private void readHWID() {
-			// TODO Auto-generated method stub
-			
-		}
+
         }
 	      
 
