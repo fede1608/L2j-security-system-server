@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 	        }
 	    }
 	}
+	
 	class ServerThread implements Runnable {
 		SSLSocket client = null;
         public ServerThread(SSLSocket c) {
@@ -35,7 +36,7 @@ import java.io.InputStreamReader;
         }
         public void run() {
             try {
-                System.out.println("Connected to client : "+client.getInetAddress().getHostName());
+                System.out.println("Connected to client : "+client.getInetAddress().toString());
                 InputStream inputstream = client.getInputStream();
 	            InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
 	            BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
@@ -45,11 +46,22 @@ import java.io.InputStreamReader;
 	                System.out.println(string);
 	                System.out.flush();
 	            }
+	            readHWID();
+	            readFilesHash();
+	            
                 client.close();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
         }
+		private void readFilesHash() {
+			// TODO Auto-generated method stub
+			
+		}
+		private void readHWID() {
+			// TODO Auto-generated method stub
+			
+		}
         }
 	      
 
