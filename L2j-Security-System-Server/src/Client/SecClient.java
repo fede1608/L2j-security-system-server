@@ -1,6 +1,7 @@
 package Client;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,7 +45,8 @@ public class SecClient {
 		//Iterate X times and read the pair filename and hash
 		for(int i=0;i<amount;i++){
 			String filename= this.readString();
-			System.out.println("Filename: "+filename);
+			System.out.println("Filepath: "+filename);
+			System.out.println("Filename: "+new File(filename).getName());
 			String hash= this.readString();
 			System.out.println("Hash: "+hash);
 			this.fileHash.put(filename, hash);
