@@ -56,8 +56,8 @@ public class SecClient {
 		try {
 			return this.bufferedreader.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// Debug
+			//e.printStackTrace();
 			return "-1";
 		}
 	}

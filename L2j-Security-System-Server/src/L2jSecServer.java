@@ -57,7 +57,7 @@ import Client.SecClient;
 		                	case 3:
 			                	break;
 		                	default:
-		                		System.out.println("Mensaje desconocido o error en el envío");
+		                		System.out.println("Cliente Desconectado");
 		                		this.socket.close();
 		                		return;
 		                };
