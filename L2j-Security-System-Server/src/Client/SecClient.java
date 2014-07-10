@@ -58,7 +58,7 @@ public class SecClient {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "";
+			return "-1";
 		}
 	}
 	

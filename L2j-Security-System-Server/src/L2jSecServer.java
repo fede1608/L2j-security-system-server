@@ -56,6 +56,10 @@ import Client.SecClient;
 			                	break;
 		                	case 3:
 			                	break;
+		                	default:
+		                		System.out.println("Mensaje desconocido o error en el envío");
+		                		this.socket.close();
+		                		return;
 		                };
 		            }
 	            }
