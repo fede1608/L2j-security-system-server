@@ -13,6 +13,10 @@ import com.l2jopenguard.Client.SecClient;
 	    void
 	            main(String[] arstring) {
 	        try {
+	        	System.out.println("L2jOpenGuard - Server side");
+	        	System.out.println("Made by fede1608 and Zephyr");
+	        	System.out.println("Version: " + Version.getVersion());
+	        	
 	            SSLServerSocketFactory sslserversocketfactory =
 	                    (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 	            SSLServerSocket sslserversocket =
