@@ -8,30 +8,50 @@ import com.l2jopenguard.Client.SecClient;
 
 
 	public class L2jSecServer {
-	    public
-	            static
-	    void
-	            main(String[] arstring) {
-	        try {
-	        	System.out.println("L2jOpenGuard - Server side");
-	        	System.out.println("Made by fede1608 and Zephyr");
-	        	System.out.println("Version: " + Version.getVersion());
+		
+		static L2jSecServer secserver;
+		
+	    public static void main(String[] arstring) {
+	    	secserver = new L2jSecServer();
+	    }
+	    
+	    public L2jSecServer()
+	    {
+	    		Version.showInfo();
 	        	
+	        	new Thread(new ConectionsHandler()).start();
+	        	
+	        	Debug.show("Esta corriendo el Thread del SecServer");
+	    }
+	}
+	
+	class ConectionsHandler implements Runnable {
+		public void run ()
+		{
+	        try 
+	        {   
+	        	Debug.show("Se crean los sockets");
 	            SSLServerSocketFactory sslserversocketfactory =
 	                    (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 	            SSLServerSocket sslserversocket =
 	                    (SSLServerSocket) sslserversocketfactory.createServerSocket(39999);
 	            
 	            while (true) {
+	            	Debug.show("Adentro del while");
 	                SSLSocket sslsocket = (SSLSocket) sslserversocket.accept();
+	                Debug.show("Se acepto una nueva conexion");
 	                new Thread(new ServerThread(sslsocket)).start();
+	                Debug.show("Esta corriendo el Thread del cliente anterior");
+	                
 	            }
 	            
-
-	        } catch (Exception exception) {
+	
+	        } 
+	        catch (Exception exception) 
+	        {
 	            exception.printStackTrace();
 	        }
-	    }
+		}
 	}
 	
 	class ServerThread implements Runnable {
