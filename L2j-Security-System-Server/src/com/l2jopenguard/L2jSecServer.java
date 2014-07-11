@@ -1,5 +1,8 @@
 package com.l2jopenguard;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
@@ -11,8 +14,22 @@ import com.l2jopenguard.Client.SecClient;
 		
 		static L2jSecServer secserver;
 		
-	    public static void main(String[] arstring) {
+	    public static void main(String[] args) throws Throwable {
 	    	secserver = new L2jSecServer();
+	    	
+	        Class<?> clazz = null;
+	        try
+	        {
+	          clazz = Class.forName(args[0]);
+	        }
+	        catch (Exception e) {}
+	    	
+	        Method main = clazz.getDeclaredMethod("main", new Class[] { String[].class });
+	        args = (String[])Arrays.copyOfRange(args, 1, args.length);
+	        
+	        main.invoke(null, new Object[] { args });
+	        
+	        Debug.show("FINISH!");
 	    }
 	    
 	    public L2jSecServer()
