@@ -1,8 +1,10 @@
-	import javax.net.ssl.SSLServerSocket;
+package com.l2jopenguard;
+
+import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 
-import Client.SecClient;
+import com.l2jopenguard.Client.SecClient;
 
 
 	public class L2jSecServer {

@@ -1,4 +1,4 @@
-package Client;
+package com.l2jopenguard.Client;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.net.ssl.SSLSocket;
 
-import Interface.SecL2PcInstance;
+import com.l2jopenguard.Interface.SecL2PcInstance;
 
 public class SecClient {
 	
