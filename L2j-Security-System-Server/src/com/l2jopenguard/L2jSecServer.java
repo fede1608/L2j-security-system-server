@@ -129,8 +129,9 @@ import com.l2jopenguard.utils.Version;
 		            		}
 		            		else
 		            		{
-		            			//TODO: desconectar
-		            			break;
+		                		System.out.println("Cliente Desconectado");
+		                		this.socket.close();
+		                		return;
 		            		}
 		            	 }
 		            }

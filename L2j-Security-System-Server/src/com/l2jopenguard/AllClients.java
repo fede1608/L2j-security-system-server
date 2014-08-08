@@ -6,10 +6,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.l2jopenguard.Client.SecClient;
+import com.l2jopenguard.Interface.SecL2PcInstance;
 
 public class AllClients {
-	
-	//Variables de objetos
 	
 	private Map<String, SecClient> _clients = new ConcurrentHashMap<>();
 	
@@ -41,6 +40,12 @@ public class AllClients {
 				deleteClient(iter.next().getHwid());
 			}
 		}
+	}
+	
+	public boolean addPlayer(SecL2PcInstance player)
+	{
+		//TODO: programar
+		return true;
 	}
 	
 	public static AllClients getInstance()

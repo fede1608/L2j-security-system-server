@@ -83,5 +83,10 @@ public class SecClient {
 	{
 		return false;
 	}
+	
+	public List<SecL2PcInstance> getPlayers()
+	{
+		return _players;
+	}
 
 }
