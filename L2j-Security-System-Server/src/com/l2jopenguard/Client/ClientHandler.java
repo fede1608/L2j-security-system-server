@@ -1,6 +1,6 @@
 package com.l2jopenguard.Client;
 
-import com.l2jopenguard.Debug;
+import com.l2jopenguard.utils.Debug;
 import com.l2jserver.gameserver.model.actor.instance.L2PcInstance;
 
 public class ClientHandler {

@@ -11,34 +11,39 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.net.ssl.SSLSocket;
 
+import com.l2jopenguard.AllClients;
 import com.l2jopenguard.Interface.SecL2PcInstance;
 
 public class SecClient {
 	
-	BufferedReader bufferedreader;
-	SSLSocket socket;
-	String HWID;
-	ConcurrentHashMap<String,String> fileHash=new ConcurrentHashMap<String,String>();
-	List<SecL2PcInstance> player= new ArrayList<SecL2PcInstance>();
-	
+	BufferedReader _bufferedreader;
+	SSLSocket _socket;
+	String _HWID;
+	ConcurrentHashMap<String,String> _fileHash = new ConcurrentHashMap<String,String>();
+	List<SecL2PcInstance> _players = new ArrayList<SecL2PcInstance>();
+
 	public SecClient(SSLSocket c) {
-		this.socket=c;
+		
+		_socket = c;
 		InputStream inputstream;
 		try {
-			inputstream = this.socket.getInputStream();
+			inputstream = _socket.getInputStream();
 			InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
-			bufferedreader = new BufferedReader(inputstreamreader);
+			_bufferedreader = new BufferedReader(inputstreamreader);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
 	}
 	
-	public void ReadHwID() {
-		this.HWID=this.readString();
-		System.out.println("Mensaje "+ this.HWID);
+	public void ReadHwID() 
+	{
+		_HWID=this.readString();
+		AllClients.getInstance().addClient(this);
+		
+		System.out.println("Mensaje "+ _HWID);
 	}
+	
 	public void ReadFileHashes() {
 		//Read amount of files
 		int amount=Integer.parseInt(this.readString());
@@ -49,14 +54,14 @@ public class SecClient {
 			System.out.println("Filename: "+new File(filename).getName());
 			String hash= this.readString();
 			System.out.println("Hash: "+hash);
-			this.fileHash.put(filename, hash);
+			_fileHash.put(filename, hash);
 		}
 		
 	}
 	
 	public String readString(){
 		try {
-			return this.bufferedreader.readLine();
+			return _bufferedreader.readLine();
 		} catch (IOException e) {
 			// Debug
 			//e.printStackTrace();
@@ -64,9 +69,19 @@ public class SecClient {
 		}
 	}
 	
-	public String getIP(){
-		return this.socket.getInetAddress().toString();
+	public String getIP()
+	{
+		return _socket.getInetAddress().toString();
 	}
 	
+	public String getHwid()
+	{
+		return _HWID;
+	}
+	
+	public boolean isOld()
+	{
+		return false;
+	}
 
 }

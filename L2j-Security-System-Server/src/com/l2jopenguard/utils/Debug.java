@@ -1,4 +1,4 @@
-package com.l2jopenguard;
+package com.l2jopenguard.utils;
 
 public class Debug {
 	
