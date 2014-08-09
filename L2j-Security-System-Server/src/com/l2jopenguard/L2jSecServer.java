@@ -121,6 +121,9 @@ import com.l2jopenguard.utils.Version;
 				                	break;
 			                	case 3:
 				                	break;
+			                	case 10:
+			                		this.cliente.readAccountFromClient();
+			                		break;
 			                	default:
 			                		System.out.println("Cliente Desconectado");
 			                		this.socket.close();

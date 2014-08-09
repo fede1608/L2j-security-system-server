@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.l2jopenguard.Client.SecClient;
 import com.l2jopenguard.Interface.SecL2PcInstance;
+import com.l2jopenguard.utils.Debug;
 
 public class AllClients {
 	
@@ -19,11 +20,13 @@ public class AllClients {
 	
 	private void deleteClient(String clientHwid)
 	{
+		Debug.show("Se elimino el cliente de HWID " + clientHwid);
 		_clients.remove(clientHwid);
 	}
 	
 	public void addClient(SecClient client)
 	{
+		Debug.show("Se agrego el cliente de HWID " + client.getHwid());
 		_clients.put(client.getHwid(), client);
 	}
 	
@@ -44,8 +47,47 @@ public class AllClients {
 	
 	public boolean addPlayer(SecL2PcInstance player)
 	{
-		//TODO: programar
-		return true;
+		Collection<SecClient> list = _clients.values();
+		boolean result = false;
+		
+		Debug.show("La IP que se busca es " + player.getIp());
+		
+		Iterator<SecClient> iter = list.iterator();
+		while (iter.hasNext())
+		{
+			
+			SecClient client = iter.next();
+			Debug.show("La IP de este secclient es " + client.getIP());
+			
+			if(client.getIP().equalsIgnoreCase(player.getIp()))
+			{
+				Debug.show("Hay coincidencia de IP de " + player.getName());
+				
+				String account = client.getAccountFromClient();
+				
+				if (account != null)
+				{
+					if (account.equalsIgnoreCase(player.getAccount()))
+					{
+						client.addPlayer(player);
+						result = true;
+						Debug.show("Se agrego " + player.getName() + " al SecClient de HWID " + iter.next().getHwid());
+					}	
+				}
+				else
+				{
+					Debug.show("La cuenta del cliente " + player.getName() + " fue null");
+				}
+
+			}
+			else
+			{
+				Debug.show("No hay coincidencia de IP de " + player.getName());
+			}
+
+		}
+		
+		return result;
 	}
 	
 	public static AllClients getInstance()
