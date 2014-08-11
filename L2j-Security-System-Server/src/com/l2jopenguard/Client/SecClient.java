@@ -107,9 +107,10 @@ public class SecClient {
 		
 		Debug.show("getAccountFromClient se espera el mensaje");
 		
-		while (_tempaccount == "" || _tempaccount == null)
+		
+		while (_tempaccount == null || _tempaccount == "")
 		{
-			Debug.show("getAccountFromClient " + _tempaccount);
+			Debug.show("Esperando la carroza");
 		}
 		
 		Debug.show("getAccountFromClient salio del while");

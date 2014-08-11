@@ -65,13 +65,15 @@ public class AllClients {
 				
 				String account = client.getAccountFromClient();
 				
+				Debug.show("AllClients: El account es " + account);
+				
 				if (account != null)
-				{
+				{		
 					if (account.equalsIgnoreCase(player.getAccount()))
 					{
 						client.addPlayer(player);
 						result = true;
-						Debug.show("Se agrego " + player.getName() + " al SecClient de HWID " + iter.next().getHwid());
+						Debug.show("Se agrego " + player.getName() + " al SecClient de HWID " + client.getHwid());
 					}	
 				}
 				else
@@ -84,7 +86,6 @@ public class AllClients {
 			{
 				Debug.show("No hay coincidencia de IP de " + player.getName());
 			}
-
 		}
 		
 		return result;
