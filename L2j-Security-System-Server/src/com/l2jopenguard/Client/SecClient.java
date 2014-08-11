@@ -1,11 +1,13 @@
 package com.l2jopenguard.Client;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +24,7 @@ public class SecClient {
 	private String _tempaccount;
 	
 	BufferedReader _bufferedreader;
-	DataOutputStream _salida;
+	BufferedWriter _bufferSalida;
 	SSLSocket _socket;
 	String _HWID;
 	ConcurrentHashMap<String,String> _fileHash = new ConcurrentHashMap<String,String>();
@@ -32,11 +34,15 @@ public class SecClient {
 		
 		_socket = c;
 		InputStream inputstream;
+		OutputStream outputstream;
 		try {
 			inputstream = _socket.getInputStream();
 			InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
 			_bufferedreader = new BufferedReader(inputstreamreader);
-			_salida = new DataOutputStream(_socket.getOutputStream());
+			
+			outputstream = _socket.getOutputStream();
+			OutputStreamWriter outputstreamwriter = new OutputStreamWriter(outputstream);
+			_bufferSalida = new BufferedWriter(outputstreamwriter);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -82,7 +88,6 @@ public class SecClient {
 		String debug = readString();
 		Debug.show("readAccountFromClient -> " + debug);
 		_tempaccount = debug;
-		_tempaccount.notify();
 	}
 	
 	public String getIP()
@@ -97,19 +102,20 @@ public class SecClient {
 	
 	public String getAccountFromClient()
 	{
+		Debug.show("getAccountFromClient se inicia el metodo");
 		writeLn(TYPE_MESSAGE);
-
-		if (_tempaccount == null || _tempaccount == "")
+		
+		Debug.show("getAccountFromClient se espera el mensaje");
+		
+		while (_tempaccount == "" || _tempaccount == null)
 		{
-			try {
-				_tempaccount.wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			Debug.show("getAccountFromClient " + _tempaccount);
 		}
 		
+		Debug.show("getAccountFromClient salio del while");
+		
 		String result = _tempaccount;
+		
 		_tempaccount = "";
 		
 		Debug.show("La cuenta que se recibio fue " + result);
@@ -120,7 +126,9 @@ public class SecClient {
 	private void writeLn(String message)
 	{
 		try {
-			_salida.writeChars(message + "\n");
+			_bufferSalida.write(message + '\n');
+			_bufferSalida.flush();
+			Debug.show("Se mando el mensaje supuestamente");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
