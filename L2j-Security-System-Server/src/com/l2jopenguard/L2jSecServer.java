@@ -126,6 +126,7 @@ import com.l2jopenguard.utils.Version;
 			                		break;
 			                	default:
 			                		System.out.println("Cliente Desconectado");
+			                		AllClients.getInstance().deleteClient(this.cliente.getHwid());
 			                		this.socket.close();
 			                		return;
 				                };

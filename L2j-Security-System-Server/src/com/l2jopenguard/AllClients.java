@@ -18,7 +18,7 @@ public class AllClients {
 		//Carga de variables de objetos
 	}
 	
-	private void deleteClient(String clientHwid)
+	public void deleteClient(String clientHwid)
 	{
 		Debug.show("Se elimino el cliente de HWID " + clientHwid);
 		_clients.remove(clientHwid);
