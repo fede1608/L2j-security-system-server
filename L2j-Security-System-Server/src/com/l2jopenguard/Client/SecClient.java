@@ -21,7 +21,7 @@ import com.l2jopenguard.utils.Debug;
 public class SecClient {
 	
 	private static final String TYPE_MESSAGE = "10";
-	private String _tempaccount;
+	private String _tempaccount = "";
 	
 	BufferedReader _bufferedreader;
 	BufferedWriter _bufferSalida;
@@ -87,7 +87,11 @@ public class SecClient {
 	{
 		String debug = readString();
 		Debug.show("readAccountFromClient -> " + debug);
-		_tempaccount = debug;
+		
+		synchronized(_tempaccount)
+		{
+			_tempaccount = debug;
+		}
 	}
 	
 	public String getIP()
@@ -107,19 +111,54 @@ public class SecClient {
 		
 		Debug.show("getAccountFromClient se espera el mensaje");
 		
+		int i = 0;
 		
-		while (_tempaccount == null || _tempaccount == "")
+		while(i < 10)
 		{
-			Debug.show("Esperando la carroza");
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				Debug.show("SecClient: Paso algo en el sleep -> " + getHwid());
+				e.printStackTrace();
+			}
+			
+			Debug.show("SecCliente: esperando cuenta");
+			
+			if (_tempaccount != "" && _tempaccount != null)
+			{
+				break;
+			}
+			else
+			{
+				i++;
+			}
 		}
 		
 		Debug.show("getAccountFromClient salio del while");
 		
-		String result = _tempaccount;
+		if (i >= 10)
+		{
+			disconnectClient();
+			return "";
+		}
 		
-		_tempaccount = "";
+		String result;
 		
-		Debug.show("La cuenta que se recibio fue " + result);
+		synchronized(_tempaccount)
+		{
+			if (_tempaccount != null)
+			{
+				result = _tempaccount;
+				Debug.show("La cuenta que se recibio fue " + result);
+			}
+			else
+			{
+				result = "";
+				Debug.show("La cuenta que se recibio es null -> " + result);
+			}
+			
+			_tempaccount = "";
+		}
 		
 		return result;
 	}
@@ -136,6 +175,18 @@ public class SecClient {
 		}
 	}
 	
+	public void disconnectClient()
+	{
+		try {
+			AllClients.getInstance().deleteClient(getHwid());
+			_socket.close();
+			System.out.println("Cliente " + getHwid() + " Desconectado");
+		} catch (IOException e) {
+			Debug.show("SecClient: por alguna extraña razon, no se pudo desconectar al cliente " + getHwid());
+			e.printStackTrace();
+		}
+	}
+	
 	public boolean isOld()
 	{
 		return false;
@@ -143,6 +194,17 @@ public class SecClient {
 	
 	public void addPlayer(SecL2PcInstance player)
 	{
+		if (_players != null)
+		{
+			for (SecL2PcInstance p : _players)
+			{
+				if (p.getName() == player.getName())
+				{
+					_players.remove(p);
+				}
+			}
+		}
+
 		_players.add(player);
 	}
 	

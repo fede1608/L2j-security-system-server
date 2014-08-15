@@ -67,7 +67,7 @@ public class AllClients {
 				
 				Debug.show("AllClients: El account es " + account);
 				
-				if (account != null)
+				if (account != null && account != "")
 				{		
 					if (account.equalsIgnoreCase(player.getAccount()))
 					{
@@ -78,7 +78,7 @@ public class AllClients {
 				}
 				else
 				{
-					Debug.show("La cuenta del cliente " + player.getName() + " fue null");
+					Debug.show("La cuenta del cliente " + player.getName() + " fue null o vacio");
 				}
 
 			}
