@@ -21,7 +21,7 @@ import com.l2jopenguard.utils.Debug;
 public class SecClient {
 	
 	private static final String TYPE_MESSAGE = "10";
-	private String _tempaccount = "";
+	private List<String> _tempaccount= new ArrayList<String>();
 	
 	BufferedReader _bufferedreader;
 	BufferedWriter _bufferSalida;
@@ -85,13 +85,18 @@ public class SecClient {
 	
 	public void readAccountFromClient()
 	{
-		String debug = readString();
-		Debug.show("readAccountFromClient -> " + debug);
+		String quantity = readString();
 		
-		synchronized(_tempaccount)
+		Debug.show("readAccountFromClient -> " + quantity);
+		
+		for(int i=0;i<Integer.parseInt(quantity);i++)
 		{
-			_tempaccount = debug;
+			synchronized(_tempaccount)
+			{
+				_tempaccount.add(readString());
+			}
 		}
+	
 	}
 	
 	public String getIP()
@@ -104,7 +109,7 @@ public class SecClient {
 		return _HWID;
 	}
 	
-	public String getAccountFromClient()
+	public List<String> getAccountFromClient()
 	{
 		Debug.show("getAccountFromClient se inicia el metodo");
 		writeLn(TYPE_MESSAGE);
@@ -113,10 +118,10 @@ public class SecClient {
 		
 		int i = 0;
 		
-		while(i < 10)
+		while(i < 20)//todo: mejorar, usar una espera con timeout
 		{
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				Debug.show("SecClient: Paso algo en el sleep -> " + getHwid());
 				e.printStackTrace();
@@ -124,7 +129,7 @@ public class SecClient {
 			
 			Debug.show("SecCliente: esperando cuenta");
 			
-			if (_tempaccount != "" && _tempaccount != null)
+			if (_tempaccount != null && _tempaccount.isEmpty())
 			{
 				break;
 			}
@@ -139,25 +144,29 @@ public class SecClient {
 		if (i >= 10)
 		{
 			disconnectClient();
-			return "";
+			return new ArrayList<String>();
 		}
 		
-		String result;
+		List<String> result;
 		
 		synchronized(_tempaccount)
 		{
-			if (_tempaccount != null)
+			
+			if (_tempaccount != null && _tempaccount.isEmpty())
 			{
 				result = _tempaccount;
-				Debug.show("La cuenta que se recibio fue " + result);
+				while(result.iterator().hasNext()){
+					Debug.show("La cuenta que se recibio fue " + result.iterator().next());
+				}
+				
 			}
 			else
 			{
-				result = "";
-				Debug.show("La cuenta que se recibio es null -> " + result);
+				result = new ArrayList<String>();
+				Debug.show("La cuenta que se recibio es null");
 			}
 			
-			_tempaccount = "";
+			_tempaccount = new ArrayList<String>();
 		}
 		
 		return result;

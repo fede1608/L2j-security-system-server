@@ -103,9 +103,9 @@ import com.l2jopenguard.utils.Version;
 		            {
 		            	System.out.println("Mensaje "+string+ " from: "+ this.cliente.getIP());
 		            	
-		            	int type = Integer.parseInt(string);
+		            	int messagetype = Integer.parseInt(string);
 		            	
-		            	if (type == 0)
+		            	if (messagetype == 0)
 		            	{
 		            		this.cliente.ReadHwID();
 		            	}
@@ -113,7 +113,7 @@ import com.l2jopenguard.utils.Version;
 		            	{
 		            		if (this.cliente.getHwid() != null)
 		            		{
-				                switch(Integer.parseInt(string)){
+				                switch(messagetype){
 			                	case 1: //Check System Hashes
 			                		this.cliente.ReadFileHashes();
 				                	break;

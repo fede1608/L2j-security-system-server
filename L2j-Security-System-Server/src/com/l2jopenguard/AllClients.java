@@ -2,6 +2,7 @@ package com.l2jopenguard;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -63,22 +64,26 @@ public class AllClients {
 			{
 				Debug.show("Hay coincidencia de IP de " + player.getName());
 				
-				String account = client.getAccountFromClient();
-				
-				Debug.show("AllClients: El account es " + account);
-				
-				if (account != null && account != "")
-				{		
-					if (account.equalsIgnoreCase(player.getAccount()))
+				List<String> accounts = client.getAccountFromClient();
+				while(accounts.iterator().hasNext()){
+					
+					String account = accounts.iterator().next();
+					
+					Debug.show("AllClients: El account es " + account);
+					
+					if (account != null && account != "")
+					{		
+						if (account.equalsIgnoreCase(player.getAccount()))
+						{
+							client.addPlayer(player);
+							result = true;
+							Debug.show("Se agrego " + player.getName() + " al SecClient de HWID " + client.getHwid());
+						}	
+					}
+					else
 					{
-						client.addPlayer(player);
-						result = true;
-						Debug.show("Se agrego " + player.getName() + " al SecClient de HWID " + client.getHwid());
-					}	
-				}
-				else
-				{
-					Debug.show("La cuenta del cliente " + player.getName() + " fue null o vacio");
+						Debug.show("La cuenta del cliente " + player.getName() + " fue null o vacio");
+					}
 				}
 
 			}
